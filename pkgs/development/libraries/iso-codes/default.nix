@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
-  version = "3.79";
+  version = "4.4";
 
   src = fetchurl {
-    url = "https://salsa.debian.org/iso-codes-team/iso-codes/uploads/ef8de8bc12e0512d26ed73436a477871/${pname}-${version}.tar.xz";
-    sha256 = "08i8hjy0qjlw9kd9i87jx967ihwh45l2xi55q1aa5265sind7byb";
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/${pname}-${version}/${pname}-${pname}-${version}.tar.bz2";
+    sha256 = "02x0wcz783ammkdrmrh31wsmww481xbkbz70vf766ivbnn5sfxn6";
   };
 
   patchPhase = ''

@@ -1,5 +1,5 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
@@ -30,11 +30,13 @@ let
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
+      rubygemsSupport = false;
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
+      , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -88,12 +90,14 @@ let
 
         patches =
           (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops;
+            inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
-          })."${ver.majMinTiny}";
+          }).${ver.majMinTiny};
 
-        postUnpack = ''
-          cp -r ${rubygems} $sourceRoot/rubygems
+        postUnpack = opString rubygemsSupport ''
+          rm -rf $sourceRoot/{lib,test}/rubygems*
+          cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
+          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
         postPatch = if atLeast25 then ''
@@ -138,12 +142,6 @@ let
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb --destdir $GEM_HOME
-          popd
-
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
 
@@ -213,35 +211,27 @@ let
     ) args; in self;
 
 in {
-  ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "8" "";
-    sha256 = {
-      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
-      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
-    };
-  };
-
   ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "7" "";
+    version = rubyVersion "2" "4" "9" "";
     sha256 = {
-      src = "12cbyf7zai8mi3mxffm5ynq3mmkcbvs7kb1bbrs259m61irgqvnd";
-      git = "1dgch9xz4wdcncb6pf2dvijm10yk6mbw2wfdrj7d3wazrjzh305z";
+      src = "1bn6n5b920qy3lsx99jr8495jkc3sg89swgb96d5fgd579g6p6zr";
+      git = "066kb1iki7mx7qkm10xhj5b6v8s47wg68v43l3nc36y2hyim1w2c";
     };
   };
 
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "6" "";
+    version = rubyVersion "2" "5" "7" "";
     sha256 = {
-      src = "19xy6rf138ys4qycv0ibsycqwbjmf1j6iv9plw9cs81hcxnd0zhx";
-      git = "067gyy7149m6vk9dfyx22mghm2gbgy7snfa7df4ddrvr1pqffqmz";
+      src = "1m6nmnj9shifp8g3yh7aimac01vl035bzcc19x2spdji6ig0sb8b";
+      git = "0wppf82c9ccdbnvj30mppr5a3mc7sxm05diahjdw7hhk29n43knp";
     };
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "4" "";
+    version = rubyVersion "2" "6" "5" "";
     sha256 = {
-      src = "0dvrw4g2igvjclxk9bmb9pf6mzxwm22zqvqa0abkfnshfnxdihag";
-      git = "1h4z66amjykpzl6lxx6yad2yfpwnwix4sw19bd96jnwg248kviqf";
+      src = "0zgdrgylq6avbblf78kpaf0k2xnkpc3jng3wkd7x67ycdrqnp5v6";
+      git = "0pay6ic22ag3bnvxffhgwp7z6clkd0p93944a1l4lvc5hxc8v77j";
     };
   };
 }

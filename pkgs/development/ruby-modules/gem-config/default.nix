@@ -18,9 +18,9 @@
 # (to make gems behave if necessary).
 
 { lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
-, libiconv, postgresql, v8_3_16_14, clang, sqlite, zlib, imagemagick
-, pkgconfig , ncurses, xapian, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
-, cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
+, libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
+, pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
+, cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
 , msgpack, qt59, libsodium, snappy, libossp_uuid, lxc, libpcap, xorg, gtk2, buildRubyGem
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
@@ -29,8 +29,6 @@
 }@args:
 
 let
-  v8 = v8_3_16_14;
-
   rainbow_rake = buildRubyGem {
     pname = "rake";
     gemName = "rake";
@@ -198,6 +196,7 @@ in
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
+    buildFlags = [ "--use-system-libraries" ];
   };
 
   gio2 = attrs: {
@@ -242,7 +241,20 @@ in
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-overflow" "-Wno-error=implicit-fallthrough" ];
+    NIX_CFLAGS_COMPILE = [
+      "-Wno-error=stringop-overflow"
+      "-Wno-error=implicit-fallthrough"
+      "-Wno-error=sizeof-pointer-memaccess"
+      "-Wno-error=cast-function-type"
+      "-Wno-error=class-memaccess"
+      "-Wno-error=ignored-qualifiers"
+      "-Wno-error=tautological-compare"
+    ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace Makefile \
+        --replace '-Wno-invalid-source-encoding' ""
+    '';
   };
 
   hitimes = attrs: {
@@ -335,11 +347,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.connector-c zlib openssl ];
+    buildInputs = [ libmysqlclient zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.connector-c zlib openssl ];
+    buildInputs = [ libmysqlclient zlib openssl ];
   };
 
   ncursesw = attrs: {
@@ -488,12 +500,15 @@ in
   sassc = attrs: {
     nativeBuildInputs = [ rake ];
     dontBuild = false;
-    SASS_LIBSASS_PATH = "${libsass}";
+    SASS_LIBSASS_PATH = libsass;
     postPatch = ''
       substituteInPlace lib/sassc/native.rb \
         --replace 'gem_root = spec.gem_dir' 'gem_root = File.join(__dir__, "../../")'
     '';
-  };
+  } // (if stdenv.isDarwin then {
+    # https://github.com/NixOS/nixpkgs/issues/19098
+    buildFlags = "--disable-lto";
+  } else {});
 
   scrypt = attrs:
     if stdenv.isDarwin then {
@@ -522,19 +537,6 @@ in
     ];
   };
 
-  sup = attrs: {
-    dontBuild = false;
-    # prevent sup from trying to dynamically install `xapian-ruby`.
-    nativeBuildInputs = [ bundler rake ];
-    postPatch = ''
-      cp ${./mkrf_conf_xapian.rb} ext/mkrf_conf_xapian.rb
-
-      substituteInPlace lib/sup/crypto.rb \
-        --replace 'which gpg2' \
-                  '${which}/bin/which gpg'
-    '';
-  };
-
   rb-readline = attrs: {
     dontBuild = false;
     postPatch = ''
@@ -561,14 +563,6 @@ in
   tiny_tds = attrs: {
     nativeBuildInputs = [ pkgconfig openssl ];
     buildInputs = [ freetds ];
-  };
-
-  therubyracer = attrs: {
-    buildFlags = [
-      "--with-v8-dir=${v8}"
-      "--with-v8-include=${v8}/include"
-      "--with-v8-lib=${v8}/lib"
-    ];
   };
 
   typhoeus = attrs: {
@@ -612,5 +606,11 @@ in
 
   zookeeper = attrs: {
     buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.cctools ];
+    dontBuild = false;
+    postPatch = ''
+      sed -i ext/extconf.rb -e "4a \
+        FileUtils.cp '${./zookeeper-ftbfs-with-gcc-8.patch}', 'patches/zkc-3.4.5-gcc-8.patch'
+      "
+    '';
   };
 }

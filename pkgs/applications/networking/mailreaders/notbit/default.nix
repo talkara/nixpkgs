@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "notbit";
   version = "2018-01-09";
 
@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mog ];
+    broken = true;
   };
 }

@@ -5,21 +5,19 @@
 
 buildGoPackage rec {
   pname = "podman";
-  version = "1.5.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "libpod";
     rev    = "v${version}";
-    sha256 = "1jg7fdshqz0x71339i0wndskb17x1k5rwpkjiwd463f96fnbfp4x";
+    sha256 = "0cwyrzjjgxclnzc1yx6vm2bvq73mldwxfwalkprzlg8vpqbxji8y";
   };
 
   goPackagePath = "github.com/containers/libpod";
 
   outputs = [ "bin" "out" "man" ];
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
   nativeBuildInputs = [ pkgconfig go-md2man ];
 
   buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];

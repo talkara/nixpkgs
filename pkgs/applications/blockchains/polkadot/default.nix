@@ -6,7 +6,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "polkadot-${version}";
+  pname = "polkadot";
   version = "0.2.17";
 
   src = fetchFromGitHub {
@@ -26,5 +26,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.akru ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

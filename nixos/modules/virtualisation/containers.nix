@@ -729,7 +729,7 @@ in
       serviceConfig = serviceDirectives dummyConfig;
     };
   in {
-    systemd.targets."multi-user".wants = [ "machines.target" ];
+    systemd.targets.multi-user.wants = [ "machines.target" ];
 
     systemd.services = listToAttrs (filter (x: x.value != null) (
       # The generic container template used by imperative containers
@@ -824,5 +824,12 @@ in
     '';
 
     environment.systemPackages = [ pkgs.nixos-container ];
+
+    boot.kernelModules = [
+      "bridge"
+      "macvlan"
+      "tap"
+      "tun"
+    ];
   });
 }

@@ -6,7 +6,7 @@
     src = pkgs.fetchFromGitHub {
       owner = "skeeto";
       repo = "elisp-ffi";
-      rev = "${version}";
+      rev = version;
       sha256 = "0z2n3h5l5fj8wl8i1ilfzv11l3zba14sgph6gz7dx7q12cnp9j22";
     };
     buildInputs = [ external.libffi ];
@@ -59,7 +59,7 @@
 
   font-lock-plus = callPackage ./font-lock-plus { };
 
-  ghc-mod = melpaBuild rec {
+  ghc-mod = melpaBuild {
     pname = "ghc";
     version = external.ghc-mod.version;
     src = external.ghc-mod.src;
@@ -75,7 +75,7 @@
     };
   };
 
-  haskell-unicode-input-method = melpaBuild rec {
+  haskell-unicode-input-method = melpaBuild {
     pname = "emacs-haskell-unicode-input-method";
     version = "20110905.2307";
     src = pkgs.fetchFromGitHub {
@@ -103,21 +103,6 @@
   helm-words = callPackage ./helm-words { };
 
   icicles = callPackage ./icicles { };
-
-  rtags = melpaBuild rec {
-    inherit (external.rtags) version src meta;
-
-    pname = "rtags";
-
-    dontConfigure = true;
-
-    propagatedUserEnvPkgs = [ external.rtags ];
-    recipe = pkgs.writeText "recipe" ''
-      (rtags
-       :repo "andersbakken/rtags" :fetcher github
-       :files ("src/*.el"))
-    '';
-  };
 
   lib-requires =
     callPackage ./lib-requires { };

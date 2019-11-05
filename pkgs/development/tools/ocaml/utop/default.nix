@@ -8,11 +8,11 @@ else
 
 stdenv.mkDerivation rec {
   pname = "utop";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/diml/utop/archive/${version}.tar.gz";
-    sha256 = "0kbg7sfn7jaic7xcy7dm543yzsywirxbgpiv2rzwnp9ny2510f9g";
+    sha256 = "0fl8524vmxb9yxjwrh5varvfp0ff3sgfp627knwbxxr69w45ad8h";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
      # derivation of just runtime deps so env vars created by
      # setup-hooks can be saved for use at runtime
-     runtime = stdenv.mkDerivation rec {
+     runtime = stdenv.mkDerivation {
        pname = "utop-runtime-env";
        inherit version;
 

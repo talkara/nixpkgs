@@ -4,7 +4,7 @@
 , cmake, ninja, boost, python3, openjdk, mono, libressl
 
 , gccStdenv, llvmPackages
-, useClang ? true
+, useClang ? false
 , ...
 }:
 
@@ -21,7 +21,7 @@ let
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
-    }: stdenv.mkDerivation rec {
+    }: stdenv.mkDerivation {
         pname = "foundationdb";
         inherit version;
 

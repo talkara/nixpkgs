@@ -251,7 +251,7 @@ let
         default = [];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
-          The set of packages that should be made availabe to the user.
+          The set of packages that should be made available to the user.
           This is in contrast to <option>environment.systemPackages</option>,
           which adds packages to all users.
         '';
@@ -546,11 +546,11 @@ in {
     environment.systemPackages = systemShells;
 
     environment.etc = {
-      "subuid" = {
+      subuid = {
         text = subuidFile;
         mode = "0644";
       };
-      "subgid" = {
+      subgid = {
         text = subgidFile;
         mode = "0644";
       };

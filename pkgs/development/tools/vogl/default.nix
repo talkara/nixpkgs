@@ -7,7 +7,7 @@
 , fetchpatch
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "vogl";
   version = "2016-05-13";
 
@@ -52,5 +52,6 @@ mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.deepfire ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

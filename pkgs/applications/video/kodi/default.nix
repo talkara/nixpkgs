@@ -13,7 +13,7 @@
 , libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray
-, sqlite, mysql, nasm, gnutls, libva, libdrm
+, sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
@@ -143,7 +143,7 @@ let
     postPatch         = cmakeProtoPatch;
   };
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
     name = "kodi-${lib.optionalString useWayland "wayland-"}${kodiVersion}";
 
     src = kodi_src;
@@ -161,7 +161,7 @@ in stdenv.mkDerivation rec {
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.connector-c avahi lame
+      sqlite libmysqlclient avahi lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libgcrypt libgpgerror libunistring

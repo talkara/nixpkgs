@@ -62,7 +62,7 @@ let
               jobs.vim.x86_64-darwin
 
               # UI apps
-              jobs.firefox-unwrapped.x86_64-darwin
+              # jobs.firefox-unwrapped.x86_64-darwin
               jobs.qt5.qtmultimedia.x86_64-darwin
               jobs.inkscape.x86_64-darwin
               jobs.gimp.x86_64-darwin
@@ -102,7 +102,7 @@ let
               # Needed for support
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
-              # Ensure that X11/GTK+ are in order.
+              # Ensure that X11/GTK are in order.
               jobs.thunderbird.x86_64-linux
               jobs.unar.x86_64-linux
 
@@ -185,7 +185,7 @@ let
             };
           };
 
-    } // (mapTestOn ((packagePlatforms pkgs) // rec {
+    } // (mapTestOn ((packagePlatforms pkgs) // {
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;
