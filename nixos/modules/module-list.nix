@@ -1,9 +1,7 @@
 [
   ./config/debug-info.nix
-  ./config/fonts/corefonts.nix
   ./config/fonts/fontconfig.nix
   ./config/fonts/fontconfig-penultimate.nix
-  ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontdir.nix
   ./config/fonts/fonts.nix
   ./config/fonts/ghostscript.nix
@@ -37,7 +35,6 @@
   ./config/terminfo.nix
   ./config/unix-odbc-drivers.nix
   ./config/users-groups.nix
-  ./config/vpnc.nix
   ./config/vte.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
@@ -318,6 +315,7 @@
   ./services/development/bloop.nix
   ./services/development/hoogle.nix
   ./services/development/jupyter/default.nix
+  ./services/development/lorri.nix
   ./services/editors/emacs.nix
   ./services/editors/infinoted.nix
   ./services/games/factorio.nix
@@ -520,7 +518,6 @@
   ./services/monitoring/munin.nix
   ./services/monitoring/nagios.nix
   ./services/monitoring/netdata.nix
-  ./services/monitoring/osquery.nix
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
@@ -540,7 +537,6 @@
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
-  ./services/network-filesystems/beegfs.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/davfs2.nix
   ./services/network-filesystems/drbd.nix
@@ -620,7 +616,6 @@
   ./services/networking/iodine.nix
   ./services/networking/iperf3.nix
   ./services/networking/ircd-hybrid/default.nix
-  ./services/networking/jormungandr.nix
   ./services/networking/iwd.nix
   ./services/networking/keepalived/default.nix
   ./services/networking/keybase.nix
@@ -844,6 +839,7 @@
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
   ./services/web-servers/traefik.nix
+  ./services/web-servers/ttyd.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/zope2.nix
