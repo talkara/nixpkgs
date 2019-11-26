@@ -251,10 +251,6 @@ in {
 
   azure-nspkg = callPackage ../development/python-modules/azure-nspkg { };
 
-  azure-cli-core = callPackage ../development/python-modules/azure-cli-core { };
-
-  azure-cli-telemetry = callPackage ../development/python-modules/azure-cli-telemetry { };
-
   azure-common = callPackage ../development/python-modules/azure-common { };
 
   azure-cosmos = callPackage ../development/python-modules/azure-cosmos { };
@@ -5256,6 +5252,10 @@ in {
 
   texttable = callPackage ../development/python-modules/texttable { };
 
+  tiledb = callPackage ../development/python-modules/tiledb { 
+    inherit (pkgs) tiledb;
+  };
+
   tiros = callPackage ../development/python-modules/tiros { };
 
   tifffile = callPackage ../development/python-modules/tifffile { };
@@ -6569,6 +6569,8 @@ in {
   hcloud = callPackage ../development/python-modules/hcloud { };
 
   managesieve = callPackage ../development/python-modules/managesieve { };
+
+  pony = callPackage ../development/python-modules/pony { };
 
 });
 
