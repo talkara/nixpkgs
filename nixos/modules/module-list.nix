@@ -806,6 +806,7 @@
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
+  ./services/web-apps/ihatemoney
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
@@ -854,7 +855,7 @@
   ./services/x11/extra-layouts.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix
-  ./services/x11/compton.nix
+  ./services/x11/picom.nix
   ./services/x11/unclutter.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/desktop-managers/default.nix
